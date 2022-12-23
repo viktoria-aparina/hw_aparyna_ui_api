@@ -6,13 +6,13 @@ import static org.testng.Assert.assertTrue;
 
 public class GoogleSearchSelenideTest {
 
-    @Test
-    public void testDoSearchAndVerify() {
-        GoogleSearchFormPageSelenide.open()
-                                    .doSearch("Cat")
-                                    .chooseAndClickOnPageNumber(3)
-                                    .selectById(1);
+  @Test
+  public void testDoSearchAndVerify() {
+    GoogleSearchFormPageSelenide.open()
+                                .doSearch("Cat")
+                                .chooseAndClickOnPageNumber(3)
+                                .selectById(1);
 
-        assertTrue(CatPageSelenide.isOpened(), "Selected link wasn't opened");
-    }
+    assertTrue(CatPageSelenide.isOpened(), "Selected link wasn't opened");
+  }
 }
