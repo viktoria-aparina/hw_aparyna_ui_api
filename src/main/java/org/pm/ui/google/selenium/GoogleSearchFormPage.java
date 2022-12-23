@@ -1,49 +1,32 @@
 package org.pm.ui.google.selenium;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import static com.codeborne.selenide.Configuration.baseUrl;
-import static com.codeborne.selenide.Selenide.$;
 
 public class GoogleSearchFormPage extends BasePage {
 
-    WebElement buttonRejectAll = driver.findElement(By.xpath("//div[text()='Reject all']"));
+  public GoogleSearchFormPage(WebDriver driver) {
+    super(driver);
+    PageFactory.initElements(driver, this);
+  }
+
+  public GoogleSearchFormPage open() {
+    driver.get(googleBaseUrl);
+    log.info("Google Chrome was opened successfully");
+    if (!driver.findElements(By.xpath("//div[text()='Reject all']")).isEmpty()) {
+      driver.findElement(By.xpath("//div[text()='Reject all']")).click();
+    }
+    return this;
+  }
+
+  public SearchResultPage doSearch(String text) {
     WebElement input = driver.findElement(By.name("q"));
-
-    public GoogleSearchFormPage(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver, this);
-    }
-
-    @Override
-    public boolean isPageOpened() {
-        try {
-            wait.until(ExpectedConditions.visibilityOf(input));
-            log.info("The page GoogleSearchFormPage was opened successfully");
-            return true;
-        } catch (TimeoutException exception) {
-            log.error("The page GoogleSearchFormPage was not opened, because of error {}", exception.getCause());
-            return false;
-        }
-    }
-
-    public GoogleSearchFormPage open() {
-        driver.get("https://google.com");
-        log.info("Google Chrome was opened successfully");
-        if (buttonRejectAll.isDisplayed()) {
-            buttonRejectAll.click();
-        } else {
-            return this;
-        }
-        return this;
-    }
-
-    public SearchResultPage doSearch(String text) {
-        input.sendKeys(text);
-        log.info("The text was entered in search input successfully");
-        input.sendKeys(Keys.ENTER);
-        return new SearchResultPage(driver);
-    }
+    input.sendKeys(text);
+    log.info("The text was entered in search input successfully");
+    input.sendKeys(Keys.ENTER);
+    return new SearchResultPage(driver);
+  }
 }
